@@ -1,0 +1,15 @@
+# MODEL PARAM ------------------------------------------------------------
+MODULE_NAME: 'model.Net'
+CLASS_NAME: 'Net'
+MODEL_PARAM: {INPUT_DIM:[5,H,W],
+              OUTPUT_DIM:[1,H,W],
+              }
+SEED: 42 # ultimate question of life, the universe, and everything
+
+# TRAINING
+FILE_LIST_PATH: 'file_list.txt'
+LEARNING_RATE: 0.0001
+EPOCH: 0
+OBJ_EPOCH: 640
+
+# TESTING
