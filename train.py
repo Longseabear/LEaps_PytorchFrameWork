@@ -1,31 +1,30 @@
 import torch
 from torch.utils.data import DataLoader
-from dataloader.DataLoaderModule import DataLoaderModule
 from torchvision import transforms
 import matplotlib.pyplot as plt
 import numpy as np
 import importlib
 import torch.optim as optim
+import torch.nn
 import time
-from model.Net import Net
 from util.ops_normal import *
 from ops.config import Config
 
 # Configuration
 
 if __name__ == '__main__':
-    # INIT for deterministic process
-    config = Config("net_info.yml")
-    print(config)
+    config_path = "net_info.yml"
+    config = Config(config_path)
+    config.CONFIG_PATH = config_path
+
+    if config.CUDA and not torch.cuda.is_available():
+        raise Exception("[INFO] gpu is not available")
 
     # MODEL LOAD
     model = dynamic_model_load(config)
-    print(model)
+    data_loader = DataLoader(dynamic_dataloder_load(config), batch_size=config.BATCH_SIZE, shuffle=True)
 
-    data_loader = DataLoader(DataLoaderModule(config.FILE_LIST_PATH), batch_size=5, shuffle=True)
     model.set_trainer(data_loader)
-
-    # for param_tensor in model.state_dict():
-    #     print(param_tensor, model.state_dict()[param_tensor].size())
+#    model.trainer.print_model_param()
 
     model.trainer.training()

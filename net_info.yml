@@ -1,15 +1,56 @@
-# MODEL PARAM ------------------------------------------------------------
-MODULE_NAME: 'model.Net'
-CLASS_NAME: 'Net'
-MODEL_PARAM: {INPUT_DIM:[5,H,W],
-              OUTPUT_DIM:[1,H,W],
-              }
+# *[SELF] -> need to modify
+# *[MODEL_SPECIFIC] -> model specific parameter
+# *[auto] -> automatically modify
+# *[end] -> end
+
+# NORMAL_PARAM -------------------------------------------------------
 SEED: 42 # ultimate question of life, the universe, and everything
 
-# TRAINING
+# MODEL PARAM ------------------------------------------------------------
+MODULE_NAME: 'model.Net'
+CLASS_NAME: 'ColorizationNet'
+
+MODEL_DESCRIPTION: 'Colorization Network'
+CUDA: True
+
+# *[auto]
+MODEL_NAME: 'ColorizationNetwork' # *
+# *[end]
+
+
+# *[SELF] check point save path is CHECKPOINT_PATH + MODEL_NAME
+CHECKPOINT_PATH: './checkpoint/'
+
+# *[MODEL_SPECIFIC] this hyper-parameter depend on the MODEL.
+MODEL_PARAM: {INPUT_DIM:[4,H,W],
+              OUTPUT_DIM:[2,H,W]}
+# *[end]
+
+# TRAINING ------------------------------------------------------------
 FILE_LIST_PATH: 'file_list.txt'
+KEEP_LATEST_EPOCH: 3 # if 0, all save
+OPTIMIZER_METHOD: 'adam'
+SUMMARY: True
+SUMMARY_IMG_ITER: 500
+PRINT_ITER: 100
+OBJ_EPOCH: 640
+BATCH_SIZE: 32
+
+# *[auto]
 LEARNING_RATE: 0.0001
 EPOCH: 0
-OBJ_EPOCH: 640
+STEP: 0
+# *[end]
 
-# TESTING
+# *[SELF] TENSORBAORD_ROOT DIRECTORY
+SUMMARY_ROOT: './summary'
+# *[end]
+
+# *[MODEL_SPECIFIC] this hyper-parameter depend on the MODEL.
+DATA_LOADER_MODULE_NAME: 'dataloader.DataLoaderModule'
+DATA_LOADER_CLASS_NAME: 'ColorizationDataLoader'
+DATASET_SIZE: -1 # -1 is all
+HINT_DENSITY: 0.005
+# *[end]
+
+# TESTING ------------------------------------------------------------

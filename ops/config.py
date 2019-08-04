@@ -15,18 +15,26 @@ class Config(dict):
         assert os.path.exists(file_path), "FILE NOT FOUND ERROR: Config File doesn't exist. : {}".format(file_path)
         try:
             with open(file_path, 'r') as f:
-                self.member = yaml.load(f)
+                super().__setattr__('member', yaml.load(f))
         except:
             assert False
 
-        # self.LOGGER_PATH = self.MODEL_PATH + self.LOGGER_PATH
-        # self.CHECKPOINT_PATH = self.MODEL_PATH + self.CHECKPOINT_PATH
-        # self.TENSORBOARD_LOG_PATH = self.MODEL_PATH + self.TENSORBOARD_LOG_PATH
-        #
-        # os.makedirs(self.LOGGER_PATH,exist_ok=True)
-        # os.makedirs(self.CHECKPOINT_PATH,exist_ok=True)
-        # os.makedirs(self.PRETRAINED_MODEL_PATH,exist_ok=True)
-        # os.makedirs(self.TENSORBOARD_LOG_PATH,exist_ok=True)
+    def __getitem__(self, key):
+        return self.member[key]
+
+    def __setitem__(self, key, value):
+        self.member[key] = value
+
+    def set_inst_attr(self, attr, val):
+        if attr == 'member':
+            raise Exception("attr exception")
+        super().__setattr__(attr,val)
+
+    def __setattr__(self, attr, val):
+        if attr in vars(self):
+            self.set_inst_attr(attr,val)
+        else:
+            self.__setitem__(attr,val)
 
     def __getattr__(self, name):
         value = self.member[name]
